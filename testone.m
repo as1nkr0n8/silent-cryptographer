@@ -1,3 +1,7 @@
+
+% SVNIT SOFTWARE TOOLS 2
+% Authors Alkesh Vaghela and Chinmay kalegaonkar
+
 function varargout = testone(varargin)
 % TESTONE MATLAB code for testone.fig
 %      TESTONE, by itself, creates a new TESTONE or raises the existing
@@ -77,78 +81,67 @@ function browse_Callback(hObject, eventdata, handles)
 % hObject    handle to browse (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-%[filename,pathname,filterindex] = ...
- %   uigetfile({'*.jpg','*.jpeg','*.bmp'},'Select the image file');
-%above command will select the image file in which message is to be encoded
-%if pathname == 0
- %   return
-%end   %if no file selected function returns null
+% [filename,pathname,filterindex] = ...
+%   uigetfile({'*.jpg','*.jpeg','*.bmp'},'Select the image file');
+% above command will select the image file in which message is to be encoded
+% if pathname == 0
+%   return
+% end   %if no file selected function returns null
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [FileName,PathName] = uigetfile({'*.jpg';'*.jpeg';'*.bmp'},'Select image file to encode');
-
 g=imread(strcat(PathName,FileName));
 global a
 a=g;
-
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function text_Callback(hObject, eventdata, handles)
-% hObject    handle to text (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of text as text
-%        str2double(get(hObject,'String')) returns contents of text as a double
-
-
-% --- Executes during object creation, after setting all properties.
 function text_CreateFcn(hObject, ~, ~)
-% hObject    handle to text (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
 % --- Executes on button press in crypt.
 function crypt_Callback(hObject, eventdata, handles)
 % hObject    handle to crypt (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 msg = get(handles.text,'String');
 global a;
 img = a;
-msg_temp = double(msg);     % Converts from ASCII to Integer Values.
-msg_dim = num2str(length(msg_temp));
-msg_length = length(msg_dim);
+
+msg_temp = double(msg);                  % Converts from ASCII to Integer Values.
+msg_dim = num2str(length(msg_temp));     % Matrix dimensions
+msg_length = length(msg_dim);            % Length
 z = 0;
+
+% Applying Header To Beginning of Message to be Encoded
+% Header is used to determine the length of message while decoding
+
 if msg_length < 7
     padtext = 7 - msg_length;
     for z = 1:padtext
         msg_dim = horzcat('0',msg_dim);
     end
-    msg_head = horzcat('t',msg_dim);
-    % Applying Header To Beginning of Message to be Encoded.
+    msg_head = horzcat('t',msg_dim); 
     msg_temp_head = horzcat(msg_head,msg_temp);
 end
 
+%---------
+
 tot_hiding_pix = max(cumprod(size(img)));
-tot_data = max(cumprod(size(msg_temp_head)));
+tot_data = max(cumprod(size(msg_temp_head)));           % Calculating cumilative product for Checking
 
 if tot_hiding_pix <= tot_data
-     error('Insufficient Hiding Space in Image')
+     error('Insufficient Hiding Space in Image')        % Image size determines the amount of information that can be encoded
 end
 
-enc_key=69;
+enc_key=69;                                             % encoding KEY set by the user
 
-msg_enc = bitxor(uint8(msg_temp_head),uint8(enc_key));
+msg_enc = bitxor(uint8(msg_temp_head),uint8(enc_key));  % Key hiding technique
 
 msg_enc_set = dec2bin(msg_enc, 8);
 
-img_prep = im2uint8(img);
+img_prep = im2uint8(img);                               % Converts image to 8 precision integer array
 
 
 
@@ -267,5 +260,7 @@ for z = 1:run_time;
 end
 
 J = img_prep;
+
 [file,path]=uiputfile('*.bmp','Save encoded image file as');
+
 imwrite(mat2gray(J),strcat(path,file));
