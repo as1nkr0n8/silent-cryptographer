@@ -1,3 +1,7 @@
+
+% SVNIT SOFTWARE TOOLS 2
+% Authors Alkesh Vaghela and Chinmay kalegaonkar
+
 function varargout = testtwo(varargin)
 % TESTTWO MATLAB code for testtwo.fig
 %      TESTTWO, by itself, creates a new TESTTWO or raises the existing
@@ -78,19 +82,16 @@ function browse_Callback(hObject, eventdata, handles)
 % hObject    handle to browse (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[FileName,PathName] = uigetfile('*.bmp','Select image file to decode');
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+[FileName,PathName] = uigetfile('*.bmp','Select image file to decode');
 g=imread(strcat(PathName,FileName));
 global a
 a=g;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% --- Executes on button press in decrypt.
-function decrypt_Callback(hObject, eventdata, handles)
-% hObject    handle to decrypt (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global a;
-img = a;
+% --- Executes on button press in decrypt
+img = a;                    % a is file 
 rm = 1; gm = 1; bm = 1;     % Initializing Counters
 rn = 1; gn = 1; bn = 1;
 
@@ -182,7 +183,7 @@ for z = 1:8;
     header = vertcat(header,tempstr);
 end
 
-enc_key = 69;  % Used for Test Phase
+enc_key = 69;                    % Private key set by User
 msg_head_set = bin2dec(header);
 temp_head = bitxor(uint8(msg_head_set),uint8(enc_key));
 
@@ -195,15 +196,9 @@ temp_head = bitxor(uint8(msg_head_set),uint8(enc_key));
 dim1 = char(temp_head(2:8));
 m = str2double(dim1);
 n = 1;    
-
-
-
-
 z = 0;
-
 enc_msg = [];
 stopmax = (m * n);
-
 for z = 1:stopmax
     temp = zeros(1,8);
     % Red    
@@ -293,7 +288,7 @@ msg_dec_set = bin2dec(enc_msg);
 msg_dec = bitxor(uint8(msg_dec_set),uint8(enc_key));
 
 msg_set = msg_dec;
-    msg_out = char(msg_set');
+    msg_out = char(msg_set'); % Take array transpose to make it into a row
     
 msg = msg_out;
 disp(msg);
