@@ -15,5 +15,5 @@
 <li>QA testing</li>
 <li>Ugly GUI</li>
 </ul>
-<h4>This project is for Software tools in 4th semister in SVNIT</h4>
+<h4>This project is for Software tools in 4th semester in SVNIT</h4>
 <h5>Made with determination ,hardwork and ctrl-c & ctrl-v by Alkesh and Chinmay</h5>
