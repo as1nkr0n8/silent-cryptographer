@@ -1,4 +1,3 @@
-
 % SVNIT SOFTWARE TOOLS 2
 % Authors Alkesh Vaghela and Chinmay kalegaonkar
 
@@ -88,7 +87,7 @@ function browse_Callback(hObject, eventdata, handles)
 %   return
 % end   %if no file selected function returns null
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[FileName,PathName] = uigetfile({'*.jpg';'*.jpeg';'*.bmp'},'Select image file to encode');
+[FileName,PathName] = uigetfile({'*.jpg';'*.jpeg';'*.bmp'},'Select image file to encrypt');
 g=imread(strcat(PathName,FileName));
 global a
 a=g;
@@ -135,7 +134,7 @@ if tot_hiding_pix <= tot_data
      error('Insufficient Hiding Space in Image')        % Image size determines the amount of information that can be encoded
 end
 
-enc_key=69;                                             % encoding KEY set by the user
+enc_key=69;                                             % encoding KEY pre-set
 
 msg_enc = bitxor(uint8(msg_temp_head),uint8(enc_key));  % Key hiding technique
 
